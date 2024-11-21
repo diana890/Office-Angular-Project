@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {User} from "../Shared/Models/user";
 import {userList} from "../Shared/mockStudent.data";
 import {Observable, of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 
 @Injectable({
@@ -10,40 +11,46 @@ import {Observable, of} from "rxjs";
 
 
 export class StudentService {
+  private apiUrl = 'api/students';
 private students:User[]=userList;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   // getting info from observables
 
   getStudents(): Observable <User[]>{
-    return of (userList);
+    return this.http.get<User[]>(this.apiUrl);
   }
 
   //Applying CRUD operations
   //Adding basic CRUD methods
   //Create: Add USer
-  addStudent(newStudent:User) : Observable<User[]>{
-    this.students.push(newStudent)
-    return of(this.students);
+  addStudent(student:User) : Observable<User> {
+    student.id = this.generateNewId();
+    return this.http.post<User>(this.apiUrl, student);
+
   }
 
   //Update an Existing user
-  updateStudent(updatedStudent: User): Observable<User[]> {
-    const index = this.students.findIndex(user => user.id === updatedStudent.id);
-    if (index !== -1) {
-      this.students[index] = updatedStudent;
-    }
-    return of(this.students);
+  updateStudent(student: User): Observable<User | undefined> {
+    const url = `$this.apiUrl}/${student.id}`
+    return this.http.put<User>(url, student);
   }
   //Delete: Remove a user by ID
-  deleteStudent(studentId: number): Observable<User[]> {
-    this.students = this.students.filter(user => user.id !== studentId);
-    return of(this.students);
+  deleteStudent(id: number): Observable <{}>{
+    const url = `$this.apiUrl}/${id}`;
+    return this.http.delete(url);
+
   }
-  getStudentById(studentId: number): Observable<User | undefined> {
-    const student = this.students.find(user => user.id === studentId);
-    return of(student);
+
+
+  getStudentById(id: number): Observable<User> {
+
+    return this.http.get<User>(`{this.apiUrl}/${id}`);
+  }
+
+  generateNewId(): number{
+    return this.students.length>0 ? Math.max(...this.students.map(student => student.id))+1: 1;
   }
 
 

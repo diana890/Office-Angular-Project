@@ -11,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let student of userList" [routerLink]="['/students',student.id ]">
+    <tr *ngFor="let student of userList" [routerLink]="['/students',student.id ]" [appHooverHighLight]="'lightblue'">
       <td>{{ student.id }}</td>
       <td>{{ student.firstName }}</td>
       <td>{{ student.lastName }}</td>

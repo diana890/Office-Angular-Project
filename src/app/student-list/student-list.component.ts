@@ -4,11 +4,12 @@ import {NgForOf} from "@angular/common";
 import {StudentDetailComponent} from "../student-detail/student-detail.component";
 import {StudentService} from "../Services/student.service";
 import {RouterLink} from "@angular/router";
+import {HooverHighLightDirective} from "../directives/hoover-high-light.directive";
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
-  imports: [NgForOf, StudentDetailComponent, RouterLink],
+  imports: [NgForOf, StudentDetailComponent, RouterLink, HooverHighLightDirective],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.css'
 })
